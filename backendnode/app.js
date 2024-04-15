@@ -3,30 +3,31 @@ const express = require("express");
 const ejs = require("ejs");
 const app = express();
 const bodyParser = require("body-parser");
-const port = 3001;
+const port = process.env.PORT || 3001;
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 const mysql = require("mysql2");
+const cors = require('cors');
 
 
 
-app.get("/api", (req, res) => {
-  res.json({ message: "Hello World!" });
-});
-
-// POSTリクエストを処理するエンドポイントを作成
-app.post('/save-data', (req, res) => {
-  // リクエストボディからデータを取得
-  const data = req.body;
-  con.query('INSERT INTO sample3 SET ?', data, (error, results, fields) => {
-    // データをデータベースに保存するなどの処理を行う
-    // ここで実際のデータベースへの保存処理を行います
-    console.log('Received data:', data);
-    // レスポンスを返す
-    res.send('Data received successfully!');
-  });
-
-});
+//app.get("/api", (req, res) => {
+//  res.json({ messages: "Hello Wssssorld!" });
+//});
+//
+//// POSTリクエストを処理するエンドポイントを作成
+//app.post('/save-data', (req, res) => {
+//  // リクエストボディからデータを取得
+//  const data = req.body;
+//  con.query('INSERT INTO sample3 SET ?', data, (error, results, fields) => {
+//    // データをデータベースに保存するなどの処理を行う
+//    // ここで実際のデータベースへの保存処理を行います
+//    console.log('Received data:', data);
+//    // レスポンスを返す
+//    res.send('Data received successfully!');
+//  });
+//
+//});
 
 
 const con = mysql.createConnection({
@@ -37,8 +38,16 @@ const con = mysql.createConnection({
   dateStrings: 'date' 
 });
 
+app.use(cors());
+app.get("/api/get/category", (req, res) => {
+     const sqlSelect = "SELECT * FROM sample3";
+     con.query(sqlSelect, (err, result) => {
+         res.send(result);
+     });
+});
 
 
+  
 // mysqlからデータを持ってくる
 app.get("/", (req, res) => {
   // cssファイルの取得
