@@ -25,6 +25,7 @@ const Infoadd = () => {
     }
   };
   
+  
 
   return (
     <div>
