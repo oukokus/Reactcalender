@@ -1,6 +1,6 @@
-import React from 'react';
+import { useState, useEffect ,useRef } from 'react'
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
+import Axios from 'axios';
 
 
 
@@ -13,20 +13,23 @@ const Infoadd = () => {
     criteriaMode: 'all',
   });
  
-  const submit = async (data) => {
-    console.log(data);
-    const response = await axios.post("/save-data", data);
-    console.log('Data sent successfully:', response.data);
-  }
-
-
-
-
+  const onSubmit = async (data) => {
+    console.log('Form data:', data);
+    try {
+      const response = await Axios.post("/api/info", data);
+      console.log('Response data:', response.data);
+      console.log('Data sent successfully');
+      window.location.href = "/";
+    } catch (error) {
+      console.error('Error sending data:', error);
+    }
+  };
+  
 
   return (
     <div>
       <h1 id="addh1">情報追加</h1>
-      <form id="form" name="formname" onSubmit={handleSubmit(submit)} action='/' method="post">
+      <form id="form" onSubmit={handleSubmit(onSubmit)}  action='/' method="post">
         <p class="pclass">注文者名:
           <input id="newname1" type="text" name="注文者名" placeholder="注文者名" {...register('注文者名', {
             required: {
@@ -40,7 +43,7 @@ const Infoadd = () => {
           })} /></p>
         {errors.注文者名?.message && <div class="errorColor">{errors.注文者名.message}</div>}
         <p class="pclass">注文者電話番号 :
-          <input id="newname2" type="tel" name="注文者電話" placeholder="注文者電話番号" {...register('注文者電話', {
+          <input id="newname2" type="tel" name="注文者電話" placeholder="注文者電話" {...register('注文者電話', {
             required: {
               value: true,
               message: '電話番号が未入力です。',
@@ -112,7 +115,7 @@ const Infoadd = () => {
             }
           })} /></p>
         {errors.価格?.message && <div class="errorColor">{errors.価格.message}</div>}
-        <p class="pclass"><button  id="submit-button" onClick={handleSubmit(submit)} >送信</button></p>
+        <p class="pclass"><button type="submit"  id="submit-button" >送信</button></p>
       </form>
     </div>
   );
